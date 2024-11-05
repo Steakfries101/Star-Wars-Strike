@@ -1,0 +1,116 @@
+#map {
+    border: 2px solid #EB212E;
+    height: 600px;
+    width: 90%;
+    margin: auto;
+
+}
+
+h1 {
+    text-decoration: underline;
+    text-align: center;
+}
+
+
+h2 {
+    text-align: center;
+    margin-top: 125px;
+}
+
+body {
+    background-color: #000;
+    color: red;
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+    background-image: url(images/kenny-eliason-OjxsirfohHU-unsplash.jpg);
+    background-size: contain;
+
+
+
+}
+
+input {
+    padding: 5px;
+    border: 1px solid #9E0B15;
+    background-color: #000;
+    color: #EB212E;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: red;
+    color: #000;
+    border: none;
+    cursor: pointer;
+    margin-top: 15px;
+    border-radius: 2px;
+
+}
+
+.input-container {
+    text-align: center;
+    width: 100%;
+    background-color: (red, .5);
+
+}
+
+.searchContainer {
+    text-align: left;
+    max-width: 670px;
+    margin: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 20px;
+    border-radius: 40px;
+}
+
+button:hover {
+    background-color: #6B0F15;
+}
+
+#map {
+    border: 2px solid #EB212E;
+    height: 600px;
+    width: 90%;
+    margin: auto;
+
+}
+
+#map-container p {
+    text-align: left;
+    width: 75%;
+    margin: 60px auto;
+    background-color: rgba(0, 0, 0, 0.4);
+
+}
+
+#infoContainer {
+    margin-top: 20px;
+    text-align: left;
+    padding-left: 0px;
+}
+
+#infoContainer h2 {
+    font-size: 24px;
+}
+
+#infoContainer p {
+    font-size: 18px;
+
+}
+
+@media only screen and (max-width: 750px) {
+
+    .input-container {
+        width: 400px;
+        margin: auto;
+    }
+
+    button {
+        margin-bottom: 20px;
+        margin-top: 5px;
+    }
+}
+
+info-container {
+    text-align: center;
+}

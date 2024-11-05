@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Star Wars Strike!</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+</head>
+
+<body>
+  <h1>Starwars Strike Map and Index!</h1>
+  <h2>Search for your favorite character or planet by name!</h2>
+
+  <div class="searchContainer">
+    <div class="input-container">
+      <input type="text" id="characterInput" placeholder="Character Name" />
+      <button id="getCharacterInfo">Get Character Info</button>
+
+      <input type="text" id="planetInput" placeholder="Planet Name" />
+      <button id="getPlanetInfo">Get Planet Info</button>
+    </div>
+    <div id="infoContainer">
+      <h3>Character Info:</h3>
+      <p id="characterInfo"></p>
+      <h3>Planet Info:</h3>
+      <p id="planetInfo"></p>
+    </div>
+  </div>
+  <h2>Death Star Strike Map (Starting with BC)</h2>
+  <div id="map-container">
+    <div id="map"></div>
+    <p>
+      The map above is the view of British Columbia from the deathstar. The little
+      lasers all over it are the strike zones. Each one representing either a city
+      village or town. To strike at each of these positions is to wipe B.C off the face
+      of the earth.<br />
+      <br />
+      <strong>Click a mark to see more info on the city marked for destruction.</strong>
+    </p>
+  </div>
+  <script src="script.js"></script>
+
+  <script>
+    const myMap = L.map("map").setView([53.7267, -124.6476], 5.5);
+    L.tileLayer(
+      "https://tile.jawg.io/9d862a54-e407-4b1c-8b32-55e0fbda6e87/{z}/{x}/{y}{r}.png?access-token=p0mKCLCvmtb9zg3nQHQarvMAAJflDWj7BydUllYl3Vph59xZJyXsqpV6RDUwGdBT",
+      {}
+    ).addTo(myMap);
+    myMap.attributionControl.addAttribution(
+      '<a href="https://www.jawg.io?utm_medium=map&utm_source=attribution" target="_blank">&copy; Jawg</a> - <a href="https://www.openstreetmap.org?utm_medium=map-attribution&utm_source=jawg" target="_blank">&copy; OpenStreetMap</a>&nbsp;contributors'
+    );
+    getCoordinates();
+  </script>
+</body>
+
+</html>
