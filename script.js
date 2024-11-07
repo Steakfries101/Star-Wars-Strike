@@ -1,5 +1,5 @@
 const bcPlaceNameApiUrl =
-  "http://geogratis.gc.ca/services/geolocation/en/locate?q=,%20BC";
+  "https://geogratis.gc.ca/services/geolocation/en/locate?q=,%20BC";
 
 const laserIcon = L.icon({
   iconUrl: "images/laser.png",
