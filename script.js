@@ -6,8 +6,12 @@ const laserIcon = L.icon({
   iconSize: [26, 26],
   iconAnchor: [13, 13],
 });
+
 document.getElementById("getPlanetInfo").addEventListener("click", emptyPlanCheck);
-document.getElementById("getCharacterInfo").addEventListener("click", emptyCharCheck);
+document.getElementById("getCharacterInfo").addEventListener("click", () => {
+  displayCharacter(document.getElementById("characterInput").value);
+});
+
 async function getCoordinates() {
   try {
     const response = await fetch(bcPlaceNameApiUrl);
@@ -30,25 +34,61 @@ async function getCoordinates() {
   }
 }
 
+async function fetchAllCharacters() {
+  const allCharacters = [];
+  let nextPage = "https://www.swapi.tech/api/people/";
+
+  while (nextPage) {
+    const response = await fetch(nextPage);
+    const data = await response.json();
+
+    // Add characters to the array
+    allCharacters.push(...data.results);
+
+    // Get the next page URL
+    nextPage = data.next;
+  }
+
+  return allCharacters;
+}
+
 async function displayCharacter(characterName) {
-  const response = await fetch(`https://swapi.dev/api/people/?search=${characterName}`);
-  const data = await response.json();
-  if (data.count === 0) {
-    alert(`No character found with the name ${characterName}`);
-  } else {
-    const character = data.results[0];
+  try {
+    // Fetch all characters
+    const allCharacters = await fetchAllCharacters();
+
+    // Filter characters by name
+    const matchedCharacters = allCharacters.filter((character) =>
+      character.name.toLowerCase().includes(characterName.toLowerCase())
+    );
+
+    if (matchedCharacters.length === 0) {
+      alert(`No character found with the name "${characterName}"`);
+      return;
+    }
+
+    // Fetch detailed information for the first match
+    const characterUrl = matchedCharacters[0].url;
+    const characterDetailResponse = await fetch(characterUrl);
+    const characterDetailData = await characterDetailResponse.json();
+
+    const character = characterDetailData.result.properties;
+
     const characterInfo = `
-      <li>Name: ${character.name}</li>
-      <li>Hair Color: ${character.hair_color}</li>
-      <li>Eye Color: ${character.eye_color}</li>
-      <li>Birth Year: ${character.birth_year}</li>
-      <li>Gender: ${character.gender}</li>
-      <li>Height: ${character.height} cm</li>
-      <li>Mass: ${character.mass} kg</li>
-      
+      <ul>
+        <li>Name: ${character.name}</li>
+        <li>Hair Color: ${character.hair_color}</li>
+        <li>Eye Color: ${character.eye_color}</li>
+        <li>Birth Year: ${character.birth_year}</li>
+        <li>Gender: ${character.gender}</li>
+        <li>Height: ${character.height} cm</li>
+        <li>Mass: ${character.mass} kg</li>
+      </ul>
     `;
 
     document.getElementById("characterInfo").innerHTML = characterInfo;
+  } catch (error) {
+    console.error("Error fetching character details:", error);
   }
 }
 function emptyCharCheck() {
