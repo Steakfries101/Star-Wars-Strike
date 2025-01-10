@@ -91,14 +91,6 @@ async function displayCharacter(characterName) {
     console.error("Error fetching character details:", error);
   }
 }
-function emptyCharCheck() {
-  const characterName = document.getElementById("characterInput").value;
-  if (characterName === "") {
-    alert("Please enter a characters name!");
-  } else {
-    displayCharacter(characterName);
-  }
-}
 
 async function displayPlanet(planetName) {
   const response = await fetch(`https://swapi.dev/api/planets/?search=${planetName}`);
