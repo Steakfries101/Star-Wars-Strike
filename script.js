@@ -1,3 +1,10 @@
+document.getElementById("getPlanetInfo").addEventListener("click", () => {
+  displayPlanet(document.getElementById("planetInput").value);
+});
+document.getElementById("getCharacterInfo").addEventListener("click", () => {
+  displayCharacter(document.getElementById("characterInput").value);
+});
+
 const bcPlaceNameApiUrl =
   "https://geogratis.gc.ca/services/geolocation/en/locate?q=,%20BC";
 
@@ -7,11 +14,7 @@ const laserIcon = L.icon({
   iconAnchor: [13, 13],
 });
 
-document.getElementById("getPlanetInfo").addEventListener("click", emptyPlanCheck);
-document.getElementById("getCharacterInfo").addEventListener("click", () => {
-  displayCharacter(document.getElementById("characterInput").value);
-});
-
+//MAP FUNCTION
 async function getCoordinates() {
   try {
     const response = await fetch(bcPlaceNameApiUrl);
@@ -34,6 +37,7 @@ async function getCoordinates() {
   }
 }
 
+//CHARACTER INFO FUNCTIONS
 async function fetchAllCharacters() {
   const allCharacters = [];
   let nextPage = "https://www.swapi.tech/api/people/";
@@ -92,29 +96,59 @@ async function displayCharacter(characterName) {
   }
 }
 
-async function displayPlanet(planetName) {
-  const response = await fetch(`https://swapi.dev/api/planets/?search=${planetName}`);
-  const data = await response.json();
-  if (data.count === 0) {
-    alert(`No planet found with the name ${planetName}`);
-  } else {
-    const planet = data.results[0];
-    const planetInfo = `
-    <li>Name: ${planet.name}</li>
-    <li>Climate: ${planet.climate}</li>
-    <li>Terrain: ${planet.terrain}</li>
-    <li>Population: ${planet.population}</li>
-    <li>Gravity: ${planet.gravity}</li>
-  `;
-    document.getElementById("planetInfo").innerHTML = planetInfo;
+//PLANET INFO FUNCTIONS
+async function fetchAllPlanets() {
+  const allPlanets = [];
+  let nextPage = "https://www.swapi.tech/api/planets/";
+
+  while (nextPage) {
+    const response = await fetch(nextPage);
+    const data = await response.json();
+
+    // Add characters to the array
+    allPlanets.push(...data.results);
+
+    // Get the next page URL
+    nextPage = data.next;
   }
+
+  return allPlanets;
 }
 
-function emptyPlanCheck() {
-  const planetName = document.getElementById("planetInput").value;
-  if (planetName == "") {
-    alert("Please enter a planet name!");
-  } else {
-    displayPlanet(planetName);
+async function displayPlanet(planetName) {
+  try {
+    // Fetch all characters
+    const allPlanets = await fetchAllPlanets();
+
+    // Filter characters by name
+    const matchedPlanets = allPlanets.filter((planet) =>
+      planet.name.toLowerCase().includes(planetName.toLowerCase())
+    );
+
+    if (matchedPlanets.length === 0) {
+      alert(`No planet found with the name "${planetName}"`);
+      return;
+    }
+
+    // Fetch detailed information for the first match
+    const planetUrl = matchedPlanets[0].url;
+    const planetDetailResponse = await fetch(planetUrl);
+    const planetDetailData = await planetDetailResponse.json();
+
+    const planet = planetDetailData.result.properties;
+
+    const planetInfo = `
+      <ul>
+        <li>Name: ${planet.name}</li>
+        <li>Climate: ${planet.climate}</li>
+        <li>Terrain: ${planet.terrain}</li>
+        <li>Population: ${planet.population}</li>
+        <li>Gravity: ${planet.gravity}</li>
+      </ul>
+    `;
+
+    document.getElementById("planetInfo").innerHTML = planetInfo;
+  } catch (error) {
+    console.error("Error fetching character details:", error);
   }
 }
